@@ -1,7 +1,7 @@
 import { Todo } from "../model/todo"
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetAllResponceDTO {
+export class GetAllResponseDTO {
   @ApiProperty({type:[Todo]})
   todos: Todo[]
 }

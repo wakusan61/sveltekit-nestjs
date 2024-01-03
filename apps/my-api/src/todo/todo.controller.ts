@@ -1,20 +1,34 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { GetAllResponceDTO } from './dto/get-responce.dto';
+import { GetAllResponseDTO } from './dto/get-all-response.dto';
 import { TodoService } from './todo.service';
 import { UpdateRequestDTO } from './dto/update-request.dto';
 import { AddRequestDTO } from './dto/add-request.dto';
 import { ApiCreatedResponse,ApiParam } from '@nestjs/swagger'
+import { GetResponseDTO } from './dto/get-response.dto';
+import { todo } from 'node:test';
 
 @Controller('todo')
 export class TodoController {
   constructor(private todoService: TodoService){} 
-  @Get()
+
+  @Get('all')
   @ApiCreatedResponse({
-    type: GetAllResponceDTO,
+    type: GetAllResponseDTO,
   })
-  getAll():GetAllResponceDTO {
+  getAll():GetAllResponseDTO {
     return { 
       todos: this.todoService.getAll()
+    }
+  }
+
+  @Get(':no')
+  @ApiCreatedResponse({
+    type: GetResponseDTO
+  })
+  get(@Param('no') no:number):GetResponseDTO {
+    return {
+      ...this.todoService.get(no),
+      no: no
     }
   }
 

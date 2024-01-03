@@ -20,6 +20,9 @@
 				<td>{todo.title}</td>
 				<td>{todo.detail}</td>
 				<td>{todo.category}</td>
+				<td>
+					<button on:click={() => location.assign(`/todo/edit/${todo.no}`)}>編集</button>
+				</td>
 			</tr>
 		{/each}
 	</tbody>
