@@ -1,5 +1,5 @@
 export type Todo = {
-  no?: number
+  no: number
   title: string 
   detail: string
   category: Category

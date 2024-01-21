@@ -1,7 +1,22 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
+	import { createRequestURL } from '$lib/define';
 
 	export let data: PageServerData;
+	$: todos = data.todos;
+
+	const removeTodo = async (no: number) => {
+		try {
+			await fetch(createRequestURL(`/todo/remove/${no}`), {
+				method: 'POST',
+				mode: 'cors'
+			});
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+		todos = todos.filter((v) => v.no !== no);
+	};
 </script>
 
 <button><a class="register" href="/todo/add">登録</a></button>
@@ -15,7 +30,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each data.todos as todo}
+		{#each todos as todo}
 			<tr>
 				<td>{todo.no}</td>
 				<td>{todo.title}</td>
@@ -23,6 +38,9 @@
 				<td>{todo.category}</td>
 				<td>
 					<button on:click={() => location.assign(`/todo/edit/${todo.no}`)}>編集</button>
+				</td>
+				<td>
+					<button on:click={async () => await removeTodo(todo.no)}>削除</button>
 				</td>
 			</tr>
 		{/each}
