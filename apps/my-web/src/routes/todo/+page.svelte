@@ -4,6 +4,7 @@
 	export let data: PageServerData;
 </script>
 
+<button><a class="register" href="/todo/add">登録</a></button>
 <table>
 	<thead>
 		<tr>
@@ -37,5 +38,9 @@
 	}
 	td {
 		padding-right: 10px;
+	}
+	.register {
+		color: black;
+		text-decoration: none;
 	}
 </style>
