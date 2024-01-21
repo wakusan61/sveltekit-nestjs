@@ -33,9 +33,6 @@ export class TodoService {
     this.todos.splice(index,1)
   }
 
-  /**
-   * FIXME:Todoのnoがオプショナルなのがおかしいので要検討
-   */
   update(todo:Todo) {
     const index = this.todos.findIndex(v => v.no == todo.no)
     if(index == -1) throw new NotFoundException()
