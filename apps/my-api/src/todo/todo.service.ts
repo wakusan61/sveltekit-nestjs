@@ -21,7 +21,10 @@ export class TodoService {
   }
 
   add(todo:Todo) {
-    this.todos.push(todo)
+    this.todos.push({
+      no: this.todos.length + 1,
+      ...todo
+    })
   }
 
   remove(no: number) {

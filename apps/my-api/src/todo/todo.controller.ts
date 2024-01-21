@@ -5,7 +5,6 @@ import { UpdateRequestDTO } from './dto/update-request.dto';
 import { AddRequestDTO } from './dto/add-request.dto';
 import { ApiCreatedResponse,ApiParam } from '@nestjs/swagger'
 import { GetResponseDTO } from './dto/get-response.dto';
-import { todo } from 'node:test';
 
 @Controller('todo')
 export class TodoController {
@@ -48,7 +47,6 @@ export class TodoController {
     name: 'no'
   })
   remove(@Param('no') no: number):void {
-    console.log(no)
     this.todoService.remove(no)
   }
 }
