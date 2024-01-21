@@ -4,11 +4,10 @@
 	export let data: PageServerData;
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 <table>
 	<thead>
 		<tr>
+			<th>No</th>
 			<th>タイトル</th>
 			<th>詳細</th>
 			<th>カテゴリ</th>
@@ -17,6 +16,7 @@
 	<tbody>
 		{#each data.todos as todo}
 			<tr>
+				<td>{todo.no}</td>
 				<td>{todo.title}</td>
 				<td>{todo.detail}</td>
 				<td>{todo.category}</td>
@@ -27,3 +27,15 @@
 		{/each}
 	</tbody>
 </table>
+
+<style>
+	table {
+		border-collapse: collapse;
+	}
+	thead {
+		border-bottom: solid 1px black;
+	}
+	td {
+		padding-right: 10px;
+	}
+</style>
