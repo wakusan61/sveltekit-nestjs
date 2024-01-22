@@ -3,7 +3,7 @@
 未実装
 
 - open api の定義書からフロントエンドの fech クライアントを自動生成
-- バックエンドの validation チェック
+- ~~バックエンドの validation チェック~~
   - zod を導入
 - フォームの valication チェック
 - コントローラのテスト
