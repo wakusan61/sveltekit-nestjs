@@ -1,7 +1,6 @@
-import { Todo } from "../model/todo";
-import { ApiProperty} from "@nestjs/swagger"
+import { createZodDto } from "nestjs-zod";
+import { TodoSchema } from "../schma/todo-schema";
 
-export class UpdateRequestDTO extends Todo {
-  @ApiProperty()
-  no: number
-}
+export const UpdateRequestSchema = TodoSchema
+
+export class UpdateRequestDTO extends createZodDto(TodoSchema) {}

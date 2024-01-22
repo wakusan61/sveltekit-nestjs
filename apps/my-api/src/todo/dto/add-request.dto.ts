@@ -1,14 +1,7 @@
-import { Todo } from "../model/todo";
-import { ApiProperty} from "@nestjs/swagger"
+import { z } from "zod";
+import { createZodDto } from "nestjs-zod";
+import { TodoSchema } from "../schma/todo-schema";
 
-export class AddRequestDTO {
-  @ApiProperty()
-  title:string
+export const AddRequestSchema = TodoSchema.omit({no:true})
 
-  @ApiProperty()
-  detail:string
-
-  @ApiProperty()
-  category: "仕事" | "プライベート" | "その他"
-
-}
+export class AddRequestDTO extends createZodDto(AddRequestSchema) {}

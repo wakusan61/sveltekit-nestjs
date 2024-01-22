@@ -1,9 +1,9 @@
 import { BadRequestException, ConsoleLogger, Injectable, NotFoundException } from '@nestjs/common';
-import { Todo } from './model/todo';
+import { TodoType } from './schma/todo-schema';
 
 @Injectable()
 export class TodoService {
-  private readonly todos:Todo[] = []
+  private readonly todos:TodoType[] = []
   private maxNo = 0
   constructor() {
     this.todos.push({no: this.getNextNo(),title:"Svlete5", detail:"Svelte5のRuneの仕様をキャッチアップする", category:"仕事"})
@@ -27,7 +27,7 @@ export class TodoService {
     return this.todos
   }
 
-  add(todo:Todo) {
+  add(todo:TodoType) {
     this.todos.push({
       no: this.getNextNo(),
       ...todo
@@ -40,7 +40,7 @@ export class TodoService {
     this.todos.splice(index,1)
   }
 
-  update(todo:Todo) {
+  update(todo:TodoType) {
     const index = this.todos.findIndex(v => v.no == todo.no)
     if(index == -1) throw new NotFoundException()
     this.todos[index] = todo

@@ -1,7 +1,9 @@
-import { Todo } from "../model/todo"
-import { ApiProperty } from '@nestjs/swagger';
+import { z } from "zod";
+import { TodoSchema, TodoType } from "../schma/todo-schema";
+import { createZodDto } from "nestjs-zod";
 
-export class GetAllResponseDTO {
-  @ApiProperty({type:[Todo]})
-  todos: Todo[]
-}
+export const GetAllResponseSchema = z.object({
+  todos: TodoSchema.array()
+})
+
+export class GetAllResponseDTO extends createZodDto(GetAllResponseSchema) {}
