@@ -10,5 +10,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
     this.logger.error(`${request.method} ${request.path} ${status} ${exception.message} ${exception.cause ?? ""}`)
+    // response を設定しないと、レスポンスを返さない
+    response
+      .status(status)
+      .json({
+        statusCode: status,
+        message: exception.message,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
   }
 }
