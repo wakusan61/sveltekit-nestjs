@@ -7,7 +7,7 @@
 セットアップ
 
 ```
-cd my-api
+cd apps/my-api
 npm i
 ```
 
@@ -22,7 +22,7 @@ npm run start:dev
 セットアップ
 
 ```
-cd my-web
+cd apps/my-web
 npm i
 ```
 
