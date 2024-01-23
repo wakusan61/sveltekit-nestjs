@@ -1,16 +1,13 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import { createRequestURL } from '$lib/define';
+	import { apiClient } from '$lib/api-client';
 
 	export let data: PageServerData;
 	$: todos = data.todos;
 
 	const removeTodo = async (no: number) => {
 		try {
-			await fetch(createRequestURL(`/todo/remove/${no}`), {
-				method: 'POST',
-				mode: 'cors'
-			});
+			await apiClient.TodoController_remove(undefined, { params: { no: no } });
 		} catch (error) {
 			console.error(error);
 			throw error;

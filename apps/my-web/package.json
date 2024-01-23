@@ -6,6 +6,9 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"server:export": "cd ../my-api/ &&npm run openapi:export",
+		"inner-client:generate": "openapi-zod-client '../my-api/src/open-api/openapi-spec.json' -o './src/lib/generated-client.ts' --export-types",
+		"client:generate": "run-s server:export inner-client:generate",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -25,6 +28,8 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"npm-run-all": "^4.1.5",
+		"openapi-zod-client": "^1.15.1",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"svelte": "^4.2.7",
@@ -36,6 +41,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"felte": "^1.2.12"
+		"@zodios/core": "^10.9.6",
+		"dotenv": "^16.3.2",
+		"felte": "^1.2.12",
+		"zod": "^3.22.4"
 	}
 }

@@ -26,10 +26,7 @@ export class TodoController {
     type: GetResponseDTO
   })
   get(@Param('no') no:number):GetResponseDTO {
-    return {
-      ...this.todoService.get(no),
-      no: no
-    }
+    return this.todoService.get(no)
   }
 
   @Post('add')

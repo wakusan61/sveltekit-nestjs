@@ -1,18 +1,16 @@
 import type { PageServerLoad } from "./$types"
 import type { Todo } from "$lib/todo"
-import { createRequestURL } from "$lib/define"
+import { apiClient } from "$lib/api-client"
+import type { ZodiosResponseByAlias } from "@zodios/core"
+import type { z } from "zod"
+import type { schemas } from "$lib/generated-client"
 
-type PageData = {
-  todos: Todo[]
-}
+type PageData = z.infer<typeof schemas.GetAllResponseDTO>
 
-export const load: PageServerLoad = async (serverLoad):Promise<PageData> => {
-  // TODO:open apiの定義から生成できるようにリファクタすること
+export const load: PageServerLoad = async ():Promise<PageData> => {
   // TODO:エラーハンドリングが適当なので要リファクタ
   try {
-    const body:PageData = await (await serverLoad.fetch(createRequestURL("/todo/all"))).json()
-    console.table(body)
-    return body
+    return await apiClient.TodoController_getAll()
   } catch (error) {
     console.error(error)
     throw new Error("リクエストでエラーが発生しました。")

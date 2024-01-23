@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { apiClient } from '$lib/api-client';
 	import { createRequestURL } from '$lib/define';
 	import { Categories } from '$lib/todo';
 	import { createForm } from 'felte';
@@ -7,17 +8,10 @@
 		onSubmit: async (values) => {
 			console.log(values);
 			try {
-				await fetch(createRequestURL('todo/add'), {
-					method: 'POST',
-					mode: 'cors',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						title: values.title,
-						detail: values.detail,
-						category: values.category
-					})
+				await apiClient.TodoController_add({
+					title: values.title,
+					detail: values.detail,
+					category: values.category
 				});
 				document.location.href = '/todo';
 			} catch (error) {

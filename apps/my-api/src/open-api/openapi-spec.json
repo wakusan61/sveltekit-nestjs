@@ -1,0 +1,299 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/todo/all": {
+      "get": {
+        "operationId": "TodoController_getAll",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/{no}": {
+      "get": {
+        "operationId": "TodoController_get",
+        "parameters": [
+          {
+            "name": "no",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/add": {
+      "post": {
+        "operationId": "TodoController_add",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/todo/update": {
+      "post": {
+        "operationId": "TodoController_update",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/todo/remove/{no}": {
+      "post": {
+        "operationId": "TodoController_remove",
+        "parameters": [
+          {
+            "name": "no",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "my-api",
+    "description": "This is open api spec for generated request client",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "GetAllResponseDTO": {
+        "type": "object",
+        "properties": {
+          "todos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "no": {
+                  "type": "number"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "detail": {
+                  "type": "string"
+                },
+                "category": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "仕事"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "enum": [
+                        "プライベート"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "enum": [
+                        "その他"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "no",
+                "title",
+                "detail",
+                "category"
+              ]
+            }
+          }
+        },
+        "required": [
+          "todos"
+        ]
+      },
+      "GetResponseDTO": {
+        "type": "object",
+        "properties": {
+          "no": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "仕事"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "プライベート"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "その他"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "no",
+          "title",
+          "detail",
+          "category"
+        ]
+      },
+      "AddRequestDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "仕事"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "プライベート"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "その他"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "detail",
+          "category"
+        ]
+      },
+      "UpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "no": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "仕事"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "プライベート"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "その他"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "no",
+          "title",
+          "detail",
+          "category"
+        ]
+      }
+    }
+  }
+}

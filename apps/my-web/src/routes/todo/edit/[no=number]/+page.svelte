@@ -3,6 +3,8 @@
 	import type { PageServerData } from './$types';
 	import { createForm } from 'felte';
 	import { createRequestURL } from '$lib/define';
+	import { apiClient } from '$lib/api-client';
+	import z from 'zod';
 
 	export let data: PageServerData;
 	let isError = false;
@@ -11,19 +13,13 @@
 		onSubmit: async (values) => {
 			console.log(values);
 			try {
-				await fetch(createRequestURL('todo/update'), {
-					method: 'POST',
-					mode: 'cors',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						no: new Number(values.no),
-						title: values.title,
-						detail: values.detail,
-						category: values.category
-					})
+				await apiClient.TodoController_update({
+					no: Number(values.no),
+					title: values.title,
+					detail: values.detail,
+					category: values.category
 				});
+
 				document.location.href = '/todo';
 			} catch (error) {
 				console.error(error);
