@@ -42,23 +42,24 @@ npm run dev
 
 ### フロントエンド
 
-- SvelteKit
-- felte
+- SvelteKit [公式](https://kit.svelte.jp/docs/introduction) [GitHub](https://github.com/sveltejs/kit)
+  - BFF
+- felte [公式](https://felte.dev/docs/svelte/getting-started) [GitHub](https://github.com/pablo-abc/felte)
   - フォーム
-- openapi-zod-client
+- zod [公式](https://zod.dev/) [GitHub](https://github.com/colinhacks/zod) [チュートリアル](https://www.totaltypescript.com/tutorials/zod)
+  - スキーマチェック
+- zodios [公式](https://www.zodios.org/docs/intro) [GitHub](https://github.com/ecyrbe/zodios)
+  - リクエストクライアント
+- openapi-zod-client [GitHub](https://github.com/astahmer/openapi-zod-client)
   - バックエンドの openapi 定義から zodios のクライアントを生成
-- zod
-  - リクエスト時の Validation に使用
-- zodios
-  - リクエストクライント
 
 ### バックエンド
 
-- NestJS
-  - nestjs-zod
-    - スキーマチェックに zod を利用するためのユーティリティ
-- zod
+- NestJS [公式](https://docs.nestjs.com/) [GitHub](https://github.com/nestjs/nest)
+- zod [公式](https://zod.dev/) [GitHub](https://github.com/colinhacks/zod) [チュートリアル](https://www.totaltypescript.com/tutorials/zod)
   - スキーマチェック
+- nestjs-zod [GitHub](https://github.com/risen228/nestjs-zod)
+  - スキーマチェックに zod を利用するためのユーティリティ
 
 ### TODO
 
