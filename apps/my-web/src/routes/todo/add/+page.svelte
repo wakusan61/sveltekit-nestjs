@@ -1,40 +1,77 @@
 <script lang="ts">
 	import { apiClient } from '$lib/api-client';
-	import { createRequestURL } from '$lib/define';
 	import { Categories } from '$lib/todo';
 	import { createForm } from 'felte';
-	let isError = false;
-	const { form } = createForm({
-		onSubmit: async (values) => {
-			console.log(values);
-			try {
-				await apiClient.TodoController_add({
-					title: values.title,
-					detail: values.detail,
-					category: values.category
-				});
-				document.location.href = '/todo';
-			} catch (error) {
-				console.error(error);
-				isError = true;
+	import { schemas } from '$lib/generated-client';
+	import type { ZodError, z } from 'zod';
+	import { validator } from '@felte/validator-zod';
+	// TODO:リクエストエラーは要見直し
+	let requestError = {
+		isError: false,
+		object: {},
+		messages: new Array<String>(),
+		reset: () => {
+			requestError.isError = false;
+			requestError.object = {};
+			requestError.messages = [];
+		},
+		set: (error: ZodError | Error | undefined) => {
+			if (!error) {
+				requestError.isError = false;
+				return;
 			}
+
+			// ZodError
+			if ('issues' in error) {
+				requestError.isError = true;
+				requestError.object = error;
+				requestError.messages = error.errors.map((v) => v.message);
+
+				return;
+			}
+
+			// 通常のエラー
+			requestError.isError = true;
+			requestError.object = error;
+			requestError.messages = [error.message];
+		}
+	};
+
+	const { form, errors } = createForm<z.infer<typeof schemas.AddRequestDTO>>({
+		extend: validator({
+			schema: schemas.AddRequestDTO
+		}),
+
+		onSubmit: async (values) => {
+			requestError.reset();
+			await apiClient.TodoController_add({
+				...values
+			});
+			document.location.href = '/todo';
+		},
+
+		onError: (error) => {
+			console.error(error);
+			requestError.set(error as Error);
 		}
 	});
 </script>
 
 <h1>Todoの追加</h1>
-{#if isError}
-	<div>エラー発生！詳細はconsole!</div>
+{#if requestError.isError}
+	<div class="error">{requestError.messages}</div>
 {/if}
 <div></div>
-<form use:form action={createRequestURL('update')} method="post">
+<form use:form>
 	<div class="column">
 		<div class="label">タイトル</div>
 		<input type="text" name="title" />
+		<div class="error">{$errors.title ?? ''}</div>
 	</div>
 	<div class="column">
 		<div class="label">詳細</div>
 		<textarea cols="100" rows="3" name="detail" />
+		<div class="error">{$errors.detail ?? ''}</div>
 	</div>
 	<div class="column">
 		<div class="label">カテゴリー</div>
@@ -43,6 +80,14 @@
 				<option value={category}>{category} </option>
 			{/each}
 		</select>
+		<div class="error">{$errors.detail ?? ''}</div>
 	</div>
 	<button type="submit">追加</button>
 </form>
+
+<style>
+	.error {
+		font-size: 10px;
+		color: red;
+	}
+</style>
