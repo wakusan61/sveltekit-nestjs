@@ -12,35 +12,32 @@
 	let requestError = {
 		isError: false,
 		object: {},
-		messages: new Array<String>()
-	};
+		messages: new Array<String>(),
+		reset: () => {
+			requestError.isError = false;
+			requestError.object = {};
+			requestError.messages = [];
+		},
+		set: (error: ZodError | Error | undefined) => {
+			if (!error) {
+				requestError.isError = false;
+				return;
+			}
 
-	const resetError = () => {
-		requestError.isError = false;
-		requestError.object = {};
-		requestError.messages = [];
-	};
+			// ZodError
+			if ('issues' in error) {
+				requestError.isError = true;
+				requestError.object = error;
+				requestError.messages = error.errors.map((v) => v.message);
 
-	const setErorr = (isError: boolean, error: ZodError | Error | undefined) => {
-		requestError.isError = isError;
-		if (!error) {
-			requestError.isError = isError;
-			return;
-		}
+				return;
+			}
 
-		// ZodError
-		if ('issues' in error) {
-			requestError.isError = isError;
+			// 通常のエラー
+			requestError.isError = true;
 			requestError.object = error;
-			requestError.messages = error.errors.map((v) => v.message);
-
-			return;
+			requestError.messages = [error.message];
 		}
-
-		// 通常のエラー
-		requestError.isError = isError;
-		requestError.object = error;
-		requestError.messages = [error.message];
 	};
 
 	// createForm に zod schema を渡すことで項目のデータ型を定義できる。
@@ -51,20 +48,16 @@
 		}),
 
 		onSubmit: async (values) => {
-			resetError();
-			console.log('todo!!!!');
+			requestError.reset();
 			await apiClient.TodoController_update({
-				no: values.no,
-				title: values.title,
-				detail: values.detail,
-				category: values.category
+				...values
 			});
 
 			document.location.href = '/todo';
 		},
 		onError: (error) => {
 			console.error(error);
-			setErorr(true, error as Error);
+			requestError.set(error as Error);
 		}
 	});
 </script>
