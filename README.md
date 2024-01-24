@@ -49,7 +49,7 @@ npm run dev
 - zod [公式](https://zod.dev/) [GitHub](https://github.com/colinhacks/zod) [チュートリアル](https://www.totaltypescript.com/tutorials/zod)
   - スキーマチェック
 - zod-i18n-map i18next [GitHub](https://github.com/aiji42/zod-i18n)
-  - zod のメッセージを日本語化。openapi-zod-client のてプレートをカスタマイズして実装
+  - zod のメッセージを日本語化。openapi-zod-client のテンプレートをカスタマイズして実装
 - zodios [公式](https://www.zodios.org/docs/intro) [GitHub](https://github.com/ecyrbe/zodios)
   - リクエストクライアント
 - openapi-zod-client [GitHub](https://github.com/astahmer/openapi-zod-client)
