@@ -1,4 +1,3 @@
-import type { ApiOf } from "@zodios/core";
 import { createApiClient } from "./generated-client";
 
 /**

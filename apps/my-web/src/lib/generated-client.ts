@@ -1,14 +1,29 @@
 import { makeApi, Zodios, type ZodiosOptions } from '@zodios/core';
 import { z } from 'zod';
 
+// zod 日本語化対応
+import i18next from 'i18next';
+import { zodI18nMap } from 'zod-i18n-map';
+// Import your language translation files
+import translation from 'zod-i18n-map/locales/ja/zod.json';
+
+// lng and resources key depend on your locale.
+i18next.init({
+	lng: 'ja',
+	resources: {
+		ja: { zod: translation }
+	}
+});
+z.setErrorMap(zodI18nMap);
+
 const GetAllResponseDTO = z
 	.object({
 		todos: z.array(
 			z
 				.object({
 					no: z.number(),
-					title: z.string(),
-					detail: z.string(),
+					title: z.string().min(1).max(20),
+					detail: z.string().max(100).optional(),
 					category: z.union([z.literal('仕事'), z.literal('プライベート'), z.literal('その他')])
 				})
 				.passthrough()
@@ -18,23 +33,23 @@ const GetAllResponseDTO = z
 const GetResponseDTO = z
 	.object({
 		no: z.number(),
-		title: z.string(),
-		detail: z.string(),
+		title: z.string().min(1).max(20),
+		detail: z.string().max(100).optional(),
 		category: z.union([z.literal('仕事'), z.literal('プライベート'), z.literal('その他')])
 	})
 	.passthrough();
 const AddRequestDTO = z
 	.object({
-		title: z.string(),
-		detail: z.string(),
+		title: z.string().min(1).max(20),
+		detail: z.string().max(100).optional(),
 		category: z.union([z.literal('仕事'), z.literal('プライベート'), z.literal('その他')])
 	})
 	.passthrough();
 const UpdateRequestDTO = z
 	.object({
 		no: z.number(),
-		title: z.string(),
-		detail: z.string(),
+		title: z.string().min(1).max(20),
+		detail: z.string().max(100).optional(),
 		category: z.union([z.literal('仕事'), z.literal('プライベート'), z.literal('その他')])
 	})
 	.passthrough();

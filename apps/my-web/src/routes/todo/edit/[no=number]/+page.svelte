@@ -2,50 +2,94 @@
 	import { Categories } from '$lib/todo';
 	import type { PageServerData } from './$types';
 	import { createForm } from 'felte';
-	import { createRequestURL } from '$lib/define';
 	import { apiClient } from '$lib/api-client';
-	import z from 'zod';
+	import { ZodError, z } from 'zod';
+	import { schemas } from '$lib/generated-client';
+	import { validator } from '@felte/validator-zod';
 
 	export let data: PageServerData;
-	let isError = false;
+	// TODO:リクエストエラーは要見直し
+	let requestError = {
+		isError: false,
+		object: {},
+		messages: new Array<String>()
+	};
 
-	const { form } = createForm({
+	const resetError = () => {
+		requestError.isError = false;
+		requestError.object = {};
+		requestError.messages = [];
+	};
+
+	const setErorr = (isError: boolean, error: ZodError | Error | undefined) => {
+		requestError.isError = isError;
+		if (!error) {
+			requestError.isError = isError;
+			return;
+		}
+
+		// ZodError
+		if ('issues' in error) {
+			requestError.isError = isError;
+			requestError.object = error;
+			requestError.messages = error.errors.map((v) => v.message);
+
+			return;
+		}
+
+		// 通常のエラー
+		requestError.isError = isError;
+		requestError.object = error;
+		requestError.messages = [error.message];
+	};
+
+	// createForm に zod schema を渡すことで項目のデータ型を定義できる。
+	const { form, errors } = createForm<z.infer<typeof schemas.UpdateRequestDTO>>({
+		// zod schemaで検証
+		extend: validator({
+			schema: schemas.UpdateRequestDTO
+		}),
+
 		onSubmit: async (values) => {
-			console.log(values);
-			try {
-				await apiClient.TodoController_update({
-					no: Number(values.no),
-					title: values.title,
-					detail: values.detail,
-					category: values.category
-				});
+			resetError();
+			console.log('todo!!!!');
+			await apiClient.TodoController_update({
+				no: values.no,
+				title: values.title,
+				detail: values.detail,
+				category: values.category
+			});
 
-				document.location.href = '/todo';
-			} catch (error) {
-				console.error(error);
-				isError = true;
-			}
+			document.location.href = '/todo';
+		},
+		onError: (error) => {
+			console.error(error);
+			setErorr(true, error as Error);
 		}
 	});
 </script>
 
 <h1>Todoの編集</h1>
-{#if isError}
-	<div>エラー発生！詳細はconsole!</div>
+{#if requestError.isError}
+	<div class="error">{requestError.messages}</div>
+	<div class="error">{JSON.stringify(requestError.object)}</div>
 {/if}
 <div></div>
-<form use:form action={createRequestURL('update')} method="post">
+<form use:form>
 	<div class="column">
 		<div class="label">No</div>
-		<input class="readonly" type="no" readonly name="no" value={data.todo.no} />
+		<!-- 数値型の入力は type="number" で定義しないと zod へ渡すときに number型で渡されない -->
+		<input class="readonly" type="number" readonly name="no" value={data.todo.no} />
 	</div>
 	<div class="column">
 		<div class="label">タイトル</div>
 		<input type="text" name="title" value={data.todo.title} />
+		<div class="error">{$errors.title ?? ''}</div>
 	</div>
 	<div class="column">
 		<div class="label">詳細</div>
 		<textarea cols="100" rows="3" name="detail" value={data.todo.detail} />
+		<div class="error">{$errors.detail ?? ''}</div>
 	</div>
 	<div class="column">
 		<div class="label">カテゴリー</div>
@@ -55,6 +99,7 @@
 			{/each}
 		</select>
 	</div>
+	<div class="error">{$errors.category ?? ''}</div>
 	<button type="submit">更新</button>
 </form>
 
@@ -67,5 +112,9 @@
 	}
 	.column {
 		margin-bottom: 15px;
+	}
+	.error {
+		font-size: 10px;
+		color: red;
 	}
 </style>

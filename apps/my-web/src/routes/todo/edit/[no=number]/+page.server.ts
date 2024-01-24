@@ -8,7 +8,7 @@ type PageData = {
   todo: z.infer<typeof schemas.GetResponseDTO>
 }
 
-export const load:PageServerLoad = async (serverLoad) => {
+export const load:PageServerLoad = async (serverLoad):Promise<PageData> => {
   try {
     console.log( Number(serverLoad.params.no))
     const result = await apiClient.TodoController_get({params:{

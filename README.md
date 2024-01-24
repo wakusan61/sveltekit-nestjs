@@ -48,10 +48,15 @@ npm run dev
   - フォーム
 - zod [公式](https://zod.dev/) [GitHub](https://github.com/colinhacks/zod) [チュートリアル](https://www.totaltypescript.com/tutorials/zod)
   - スキーマチェック
+- zod-i18n-map i18next [GitHub](https://github.com/aiji42/zod-i18n)
+  - zod のメッセージを日本語化。openapi-zod-client のてプレートをカスタマイズして実装
 - zodios [公式](https://www.zodios.org/docs/intro) [GitHub](https://github.com/ecyrbe/zodios)
   - リクエストクライアント
 - openapi-zod-client [GitHub](https://github.com/astahmer/openapi-zod-client)
-  - バックエンドの openapi 定義から zodios のクライアントを生成
+  - バックエンドの openapi 定義から zodios のクライアントと zod schema を生成
+    - バックエンドと zod 定義は厳密には共通化していない zod → openapi → zod と openapi を介して間接的に共通化
+- @felte/validator-zod [公式](https://felte.dev/docs/svelte/validators#using-zod)
+  - felte で zod を使うためのユーティリティ
 
 ### バックエンド
 
