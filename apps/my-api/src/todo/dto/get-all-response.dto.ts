@@ -1,9 +1,9 @@
-import { z } from "zod";
-import { TodoSchema, Todo } from "../schma/todo-schema";
-import { createZodDto } from "nestjs-zod";
+import { z } from 'zod';
+import { TodoSchema } from '../schma/todo-schema';
+import { createZodDto } from 'nestjs-zod';
 
-export const GetAllResponseSchema = z.object({
-  todos: TodoSchema.array()
-})
+const GetAllResponseSchema = z.object({
+  todos: TodoSchema.array(),
+});
 
 export class GetAllResponseDTO extends createZodDto(GetAllResponseSchema) {}

@@ -1,6 +1,6 @@
-import { TodoSchema } from "../schma/todo-schema";
-import { createZodDto } from "nestjs-zod";
+import { TodoSchema } from '../schma/todo-schema';
+import { createZodDto } from 'nestjs-zod';
 
-export const GetResponseSchema = TodoSchema
+const GetResponseSchema = TodoSchema;
 
-export class GetResponseDTO extends createZodDto(TodoSchema) {}
+export class GetResponseDTO extends createZodDto(GetResponseSchema) {}

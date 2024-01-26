@@ -1,13 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './http-exception-filter/http-exception-filter.filter';
+import { HttpExceptionFilter } from './http-exception/http-exception.filter';
 import { patchNestJsSwagger } from 'nestjs-zod';
+import { ZodValidationExceptionFilter } from './zod-validation-exception/zod-validation-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // グローバルエラーフィルターの設定
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new ZodValidationExceptionFilter());
 
   // ZodからOpenAPIを設定
   patchNestJsSwagger();
@@ -23,7 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   // TODO:クロスオリジン設定をすること
-  app.enableCors()
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();
