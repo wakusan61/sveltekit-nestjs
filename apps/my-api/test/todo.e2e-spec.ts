@@ -62,6 +62,102 @@ describe('TodoController (e2e)', () => {
     });
   });
 
+  describe('POST todo/add', () => {
+    it('正常系', async () => {
+      const created: Todo = {
+        title: 'add title',
+        detail: 'add detail',
+        category: 'その他',
+      };
+      await request(app.getHttpServer())
+        .post('/todo/add')
+        .send(created)
+        .expect(201);
+      const result = TodoFixture.get(1, todoService);
+      expect(result).toEqual({
+        ...created,
+        no: 1,
+      });
+    });
+
+    it('タイトルが空文字', async () => {
+      const created: Todo = {
+        title: '',
+        detail: `detail update`,
+        category: '仕事',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+
+    it('タイトルが20文字より大きい', async () => {
+      const created: Todo = {
+        title: '123456789012345678901',
+        detail: `detail add`,
+        category: '仕事',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+    it('タイトルが指定されていない。', async () => {
+      const created: Todo = {
+        detail: `detail add`,
+        category: '仕事',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+    it('詳細が指定なしでエラーにならない', async () => {
+      const created: Todo = {
+        title: `title add`,
+        category: '仕事',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(201);
+    });
+    it('詳細が100文字より大きい', async () => {
+      const created: Todo = {
+        detail:
+          '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
+        title: `title add`,
+        category: '仕事',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+    it('カテゴリーが指定されていない', async () => {
+      const created: Todo = {
+        detail: 'detail add',
+        title: `title add`,
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+    it('カテゴリーにない文字列が指定されている', async () => {
+      const created = {
+        detail: 'detail add',
+        title: `title add`,
+        category: 'ほげほげ',
+      };
+      await request(app.getHttpServer())
+        .post(`/todo/add`)
+        .send(created)
+        .expect(400);
+    });
+  });
+
   describe('POST /todo/update', () => {
     it('正常系', async () => {
       const before = TodoFixture.add({ no: 31 }, todoService);

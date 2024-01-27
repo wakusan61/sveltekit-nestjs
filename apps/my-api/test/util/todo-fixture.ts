@@ -20,6 +20,7 @@ export namespace TodoFixture {
   };
   export const removeAll = (todoService: TodoService) => {
     todoService['todos'].splice(0);
+    todoService['maxNo'] = 0;
   };
   export const get = (
     no: number,
