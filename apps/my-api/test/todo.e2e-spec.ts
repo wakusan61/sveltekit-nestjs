@@ -297,4 +297,18 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
   });
+
+  describe('POST /remove/:no', () => {
+    it('正常系', async () => {
+      const todo = TodoFixture.add({ no: 41 }, todoService);
+      await request(app.getHttpServer())
+        .post(`/todo/remove/${todo.no}`)
+        .expect(201);
+    });
+    it('Not Found', async () => {
+      await request(app.getHttpServer())
+        .post(`/todo/remove/999999`)
+        .expect(404);
+    });
+  });
 });
