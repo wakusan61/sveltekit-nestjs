@@ -68,7 +68,9 @@ npm run dev
 
 ### TODO
 
-- WIP:e2e テスト
+- 単体テスト(e2e 以外)
+- Lint、Pritter の設定
+- GitHubActions の整備
 - フロント・バックの共通ライブラリ作成
 - DB アクセス追加
 - モノレポ対応

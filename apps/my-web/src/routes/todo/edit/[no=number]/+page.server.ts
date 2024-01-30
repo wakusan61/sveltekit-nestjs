@@ -1,4 +1,3 @@
-import { createRequestURL } from '$lib/define';
 import { apiClient } from '$lib/api-client';
 import type { PageServerLoad } from './$types';
 import { schemas } from '$lib/generated-client';
