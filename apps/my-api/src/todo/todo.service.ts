@@ -5,63 +5,45 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Todo } from './schma/todo-schema';
+import { TodoRepository } from '../lib/repository/todo.repository';
 
 @Injectable()
 export class TodoService {
-  private readonly todos: Todo[] = [];
-  private maxNo = 0;
-  constructor() {
-    this.todos.push({
-      no: this.getNextNo(),
+  constructor(private readonly repository: TodoRepository) {
+    this.repository.add({
       title: 'Svlete5',
       detail: 'Svelte5のRuneの仕様をキャッチアップする',
       category: '仕事',
     });
-    this.todos.push({
-      no: this.getNextNo(),
+    this.repository.add({
       title: '買い物',
       detail: 'トイレットペーパーを買いに行く',
       category: 'プライベート',
     });
-    this.todos.push({
-      no: this.getNextNo(),
+    this.repository.add({
       title: '読書',
       detail: 'エンジニアリングマネージャの仕事を読む',
       category: 'その他',
     });
   }
 
-  private getNextNo() {
-    this.maxNo++;
-    return this.maxNo;
-  }
-
   get(no: number) {
-    const todo = this.todos.find((v) => v.no == no);
-    if (!todo) throw new NotFoundException();
-    return todo;
+    return this.repository.get(no);
   }
 
   getAll() {
-    return this.todos;
+    return this.repository.getAll();
   }
 
-  add(todo: Todo) {
-    this.todos.push({
-      no: this.getNextNo(),
-      ...todo,
-    });
+  add(todo: Todo): number {
+    return this.repository.add(todo);
   }
 
   remove(no: number) {
-    const index = this.todos.findIndex((v) => v.no == no);
-    if (index == -1) throw new NotFoundException();
-    this.todos.splice(index, 1);
+    return this.repository.remove(no);
   }
 
   update(todo: Todo) {
-    const index = this.todos.findIndex((v) => v.no == todo.no);
-    if (index == -1) throw new NotFoundException();
-    this.todos[index] = todo;
+    return this.repository.update(todo);
   }
 }

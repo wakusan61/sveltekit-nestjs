@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { GetAllResponseDTO } from './dto/get-all-response.dto';
 import { TodoService } from './todo.service';
 import { UpdateRequestDTO } from './dto/update-request.dto';
@@ -30,16 +37,20 @@ export class TodoController {
     type: GetResponseDTO,
   })
   get(@Param() params: GetRequestDTO): GetResponseDTO {
-    return this.todoService.get(params.no);
+    const todo = this.todoService.get(params.no);
+    if (!todo) throw new NotFoundException();
+    return todo;
   }
 
   @Post('add')
   add(@Body() dto: AddRequestDTO): void {
+    // TODO サービスのエラーに応じたExceptionを投げる。
     this.todoService.add(dto);
   }
 
   @Post('update')
   update(@Body() dto: UpdateRequestDTO): void {
+    // TODO サービスのエラーに応じたExceptionを投げる。
     this.todoService.update(dto);
   }
 
@@ -48,6 +59,7 @@ export class TodoController {
     name: 'no',
   })
   remove(@Param() params: RemoveRequestDTO): void {
+    // TODO サービスのエラーに応じたExceptionを投げる。
     this.todoService.remove(params.no);
   }
 }

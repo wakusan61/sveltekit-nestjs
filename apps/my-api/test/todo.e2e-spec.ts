@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { TodoService } from './../src/todo/todo.service';
 import { TodoFixture } from './util/todo-fixture';
 import { Todo } from './../src/todo/schma/todo-schema';
+import { TodoRepository } from './../src/lib/repository/todo.repository';
 
 describe('TodoController (e2e)', () => {
   let app: INestApplication;
-  let todoService: TodoService;
+  let repository: TodoRepository;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -18,14 +18,14 @@ describe('TodoController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
     //TODO:後で消すこと
-    todoService = app.get(TodoService);
-    TodoFixture.removeAll(todoService);
+    repository = app.get(TodoRepository);
+    TodoFixture.removeAll(repository);
   });
   describe('GET /:no', () => {
     it('正常系', () => {
       // テストデータ
       // TODO: テストデータの構築方法は別途検討すること
-      const data = TodoFixture.add({ no: 11 }, todoService);
+      const data = TodoFixture.add({ no: 11 }, repository);
 
       return request(app.getHttpServer())
         .get('/todo/11')
@@ -43,9 +43,9 @@ describe('TodoController (e2e)', () => {
   describe('GET /todo/all', () => {
     it('正常系', () => {
       const todos = [
-        TodoFixture.add({ no: 21 }, todoService),
-        TodoFixture.add({ no: 22 }, todoService),
-        TodoFixture.add({ no: 23 }, todoService),
+        TodoFixture.add({ no: 21 }, repository),
+        TodoFixture.add({ no: 22 }, repository),
+        TodoFixture.add({ no: 23 }, repository),
       ];
       return request(app.getHttpServer())
         .get('/todo/all')
@@ -54,7 +54,7 @@ describe('TodoController (e2e)', () => {
     });
 
     it('0件', () => {
-      TodoFixture.removeAll(todoService);
+      TodoFixture.removeAll(repository);
       return request(app.getHttpServer())
         .get('/todo/all')
         .expect(200)
@@ -73,7 +73,7 @@ describe('TodoController (e2e)', () => {
         .post('/todo/add')
         .send(created)
         .expect(201);
-      const result = TodoFixture.get(1, todoService);
+      const result = TodoFixture.get(1, repository);
       expect(result).toEqual({
         ...created,
         no: 1,
@@ -160,7 +160,7 @@ describe('TodoController (e2e)', () => {
 
   describe('POST /todo/update', () => {
     it('正常系', async () => {
-      const before = TodoFixture.add({ no: 31 }, todoService);
+      const before = TodoFixture.add({ no: 31 }, repository);
       const updated: Todo = {
         no: before.no,
         title: `title update`,
@@ -171,7 +171,7 @@ describe('TodoController (e2e)', () => {
         .post(`/todo/update`)
         .send(updated)
         .expect(201);
-      const after = TodoFixture.get(before.no, app.get(TodoService));
+      const after = TodoFixture.get(before.no, repository);
       expect(after).toEqual(updated);
     });
 
@@ -182,7 +182,7 @@ describe('TodoController (e2e)', () => {
     });
 
     it('タイトルが空文字', async () => {
-      const before = TodoFixture.add({ no: 32 }, todoService);
+      const before = TodoFixture.add({ no: 32 }, repository);
       const updated: Todo = {
         no: before.no,
         title: '',
@@ -196,7 +196,7 @@ describe('TodoController (e2e)', () => {
     });
 
     it('タイトルが20文字より大きい', async () => {
-      const before = TodoFixture.add({ no: 33 }, todoService);
+      const before = TodoFixture.add({ no: 33 }, repository);
       const updated: Todo = {
         no: before.no,
         title: '123456789012345678901',
@@ -209,7 +209,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('タイトルが指定されていない。', async () => {
-      const before = TodoFixture.add({ no: 34 }, todoService);
+      const before = TodoFixture.add({ no: 34 }, repository);
       const updated: Todo = {
         no: before.no,
         detail: `detail update`,
@@ -221,7 +221,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('詳細が指定なしでエラーにならない', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated: Todo = {
         no: before.no,
         title: `title update`,
@@ -233,7 +233,7 @@ describe('TodoController (e2e)', () => {
         .expect(201);
     });
     it('詳細が100文字より大きい', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated: Todo = {
         no: before.no,
         detail:
@@ -247,7 +247,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('カテゴリーが指定されていない', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated: Todo = {
         no: before.no,
         detail: 'detail updated',
@@ -259,7 +259,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('カテゴリーにない文字列が指定されている', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated = {
         no: before.no,
         detail: 'detail updated',
@@ -272,7 +272,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('noが指定されていない', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated: Todo = {
         detail: 'detail updated',
         title: `title update`,
@@ -284,7 +284,7 @@ describe('TodoController (e2e)', () => {
         .expect(400);
     });
     it('noに0以下を指定している', async () => {
-      const before = TodoFixture.add({ no: 35 }, todoService);
+      const before = TodoFixture.add({ no: 35 }, repository);
       const updated: Todo = {
         no: 0,
         detail: 'detail updated',
@@ -300,7 +300,7 @@ describe('TodoController (e2e)', () => {
 
   describe('POST /remove/:no', () => {
     it('正常系', async () => {
-      const todo = TodoFixture.add({ no: 41 }, todoService);
+      const todo = TodoFixture.add({ no: 41 }, repository);
       await request(app.getHttpServer())
         .post(`/todo/remove/${todo.no}`)
         .expect(201);
