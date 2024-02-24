@@ -6,4 +6,4 @@ const RemoveRequestSchema = z.object({
   no: z.coerce.number(),
 });
 
-export class RemoveREquestDTO extends createZodDto(RemoveRequestSchema) {}
+export class RemoveRequestDTO extends createZodDto(RemoveRequestSchema) {}

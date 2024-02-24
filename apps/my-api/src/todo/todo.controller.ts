@@ -13,7 +13,7 @@ import { AddRequestDTO } from './dto/add-request.dto';
 import { ApiCreatedResponse, ApiParam } from '@nestjs/swagger';
 import { GetResponseDTO } from './dto/get-response.dto';
 import { GetRequestDTO } from './dto/get-request.dto';
-import { RemoveREquestDTO as RemoveRequestDTO } from './dto/remove-request.dto';
+import { RemoveRequestDTO } from './dto/remove-request.dto';
 import { ApiAllParams } from '../lib/decorator/api-all-params';
 
 @Controller('todo')
@@ -55,9 +55,7 @@ export class TodoController {
   }
 
   @Post('remove/:no')
-  @ApiParam({
-    name: 'no',
-  })
+  @ApiAllParams(RemoveRequestDTO)
   remove(@Param() params: RemoveRequestDTO): void {
     // TODO サービスのエラーに応じたExceptionを投げる。
     this.todoService.remove(params.no);

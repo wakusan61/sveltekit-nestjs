@@ -7,7 +7,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"server:export": "cd ../my-api/ &&npm run openapi:export",
-		"inner-client:generate": "openapi-zod-client '../my-api/src/open-api/openapi-spec.json' -o './src/lib/generated-client.ts' -t './src/config/openapi-zod-template-tanslated.hbs'",
+		"inner-client:generate": "openapi-zod-client '../my-api/src/open-api/openapi-spec.json' -o './src/lib/generated-client.ts' -t './config/openapi-zod-template-tanslated.hbs'",
 		"client:generate": "run-s server:export inner-client:generate",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
